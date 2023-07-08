@@ -28,6 +28,7 @@ public class MemberApiController {
      *
      *  SOL 1: 노출 안하려고 하는 필드를 JsonIgnore 에너테이션 처리 - 이 필드를 다른 곳에서 쓴다면? 답이 없다.
      *
+     *
      * */
     @GetMapping("/api/v1/members")
     public List<Member> membersV1() {

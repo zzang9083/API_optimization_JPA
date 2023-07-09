@@ -2,6 +2,7 @@ package jpabook.jpashop.repository;
 
 import jpabook.jpashop.domain.Order;
 
+import jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryDto;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -108,6 +109,16 @@ public class OrderRepository {
                         " join fetch o.delivery d", Order.class)
                 .getResultList();
     }
+
+    // 원하는 필드만 셀렉트 할 수 있도록 select절에 dto를 표현(객체가 아니라, 필드데이터를 넣는 생성자로 표현)
+    // 이렇게 특수한 쿼리들은 Repository 패키지에 별도로 분리하여 만든다.
+//    public List<OrderSimpleQueryDto> findOrderDtos() {
+//        return em.createQuery(
+//                "select new jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryDto(o.id, m.name, o.orderDate, o.status, m.address) from Order o" +
+//                        " join o.member m"+
+//                        " join o.delivery d",OrderSimpleQueryDto.class)
+//               .getResultList();
+//    }
 
     public List<Order> findAllWithItem() {
         return em.createQuery(

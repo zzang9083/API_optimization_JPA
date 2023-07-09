@@ -133,7 +133,7 @@ public class OrderSimpleApiController {
             name = order.getMember().getName();
             orderDate = order.getOrderDate();
             orderStatus = order.getStatus();
-            address = order.getDelivery().getAddress();;
+            address = order.getDelivery().getAddress();
         }
     }
 

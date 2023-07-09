@@ -14,8 +14,8 @@ public class JpashopApplication {
 
 	@Bean
 	Hibernate5Module hibernate5Module() {
+		// Lazy 로딩된 객체들(프록시 객체들)은 NULL로 표시해줌(터치해주면 객체 생성되면서 나옴)
 		Hibernate5Module hibernate5Module = new Hibernate5Module();
-		//강제 지연 로딩 설정
-		hibernate5Module.configure(Hibernate5Module.Feature.FORCE_LAZY_LOADING, true);
+		//hibernate5Module.configure(Hibernate5Module.Feature.FORCE_LAZY_LOADING, true); //강제 지연 로딩 설정
 		return hibernate5Module;
 	}}

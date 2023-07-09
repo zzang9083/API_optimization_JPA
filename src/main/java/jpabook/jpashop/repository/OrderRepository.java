@@ -122,7 +122,8 @@ public class OrderRepository {
 
     public List<Order> findAllWithItem() {
         return em.createQuery(
-                "select distinct o from Order o" +
+                "select distinct o from Order o" +  // distinct : 1row - 2row join이면 row는 2row가 됨 - 업무적인 판단에서 중복값을 바꿔주도록 한다.
+                                                           // db의 distinct는 모든 값이 다 같아야하지않나? JPA가 distinct가 붙은 객체를 가지고 올 때, 같은 값이면 중복을 필터해준다.
                         " join fetch o.member m" +
                         " join fetch o.delivery d" +
                         " join fetch o.orderItems oi" +

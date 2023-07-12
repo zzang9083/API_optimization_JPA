@@ -12,7 +12,8 @@ spring:
       hibernate:
 #        show_sql: true
         format_sql: true
-#        default_batch_fetch_size: 1000 #최적화 옵션
+        default_batch_fetch_size: 1000 #최적화 옵션 - ToN일 때, 인 조건으로 땡겨오는 최대 갯수(쿼리가 n 번 나갈걸 그냥 in조건으로 n개를 다 떙겨온다.)
+                                       #            in절 조건 안에 있는 in절도 한번에 땡겨온다.
 
 logging.level:
   org.hibernate.SQL: debug

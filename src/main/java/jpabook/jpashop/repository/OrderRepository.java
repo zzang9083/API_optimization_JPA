@@ -110,6 +110,17 @@ public class OrderRepository {
                 .getResultList();
     }
 
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                        "select o from Order o" +
+                                " join fetch o.member m" +
+                                " join fetch o.delivery d", Order.class
+                )
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
     // 원하는 필드만 셀렉트 할 수 있도록 select절에 dto를 표현(객체가 아니라, 필드데이터를 넣는 생성자로 표현)
     // 이렇게 특수한 쿼리들은 Repository 패키지에 별도로 분리하여 만든다.
 //    public List<OrderSimpleQueryDto> findOrderDtos() {
@@ -131,14 +142,6 @@ public class OrderRepository {
                 .getResultList();
     }
 
-    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
-        return em.createQuery(
-                "select o from Order o" +
-                        " join fetch o.member m" +
-                        " join fetch o.delivery d", Order.class)
-                .setFirstResult(offset)
-                .setMaxResults(limit)
-                .getResultList();
-    }
+
 }
 

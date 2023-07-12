@@ -9,6 +9,7 @@ import jpabook.jpashop.repository.OrderSearch;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -86,6 +87,30 @@ public class OrderApiController {
     public List<OrderDto> orderV3() {
         List<Order> orders = orderRepository.findAllWithItem();
 
+
+        return orders.stream()
+                .map(o -> new OrderDto(o))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     *
+     * V3.1    : 쿼리 최적화
+     *
+     * 개선점 : 1Ton 관계의 페치조인에서 페이징을 할 경우, distinct 전에 페이징을 하는 문제로 데이터의 부정합이 올 수도 있다.
+     *         이에 NTo1에 대해서만 패치조인하고, 1ToN은 lazy fetch으로 남겨둔다. 이때 쿼리가 lazy fetch로 넘어가는 것을 대비해서
+     *         application.yml에 default_batch_fetch_size 설정을 통해 lazy fetch를 최적화한다.(인쿼리 방식으로 최적화)
+     *         - 페치 조인 방식과 비교해서 쿼리 호출 수가 약간 증가하지만, DB 데이터 전송량이 감소한다.
+     *         - 무엇보다 컬렉션 페치조인은 페이징이 불가능 하지만 이 방법은 페이징이 가능하다.
+     * 알아둘 것 : default_batch_fetch_size는 100-1000개 사이로 적절하게 설정한다.
+     *
+     * */
+    @GetMapping("api/v3.1/orders")
+    public List<OrderDto> orderV3_page(
+            @RequestParam(value = "offset", defaultValue = "0") int offset,
+            @RequestParam(value = "limit", defaultValue = "100") int limit)
+    {
+        List<Order> orders = orderRepository.findAllWithMemberDelivery(); //ToOne 관계가 걸린거만 패치조인으로 가지고오는 method
 
         return orders.stream()
                 .map(o -> new OrderDto(o))

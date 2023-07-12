@@ -69,7 +69,7 @@ public class OrderSimpleApiController {
         // order 2개가 조회
         List<Order> orders = orderRepository.findAllByString(new OrderSearch());
 
-        // 2개에 대한 쿼리가 루프를 돌면서 실행(터치되는만큼 쿼리가 계속 수행됨)
+        // dto에 조회되는 oneToN의 객체들에 대해 쿼리가 루프를 돌면서 실행(터치되는만큼 쿼리가 계속 수행됨)
         List<SimpleOrderDto> result = orders.stream()
                                             .map(o -> new SimpleOrderDto(o))
                                             .collect(Collectors.toList());

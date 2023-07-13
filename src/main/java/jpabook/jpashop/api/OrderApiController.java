@@ -6,6 +6,8 @@ import jpabook.jpashop.domain.OrderItem;
 import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
+import jpabook.jpashop.repository.order.query.OrderQueryDto;
+import jpabook.jpashop.repository.order.query.OrderQueryRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class OrderApiController {
 
     private final OrderRepository orderRepository;
+    private final OrderQueryRepository orderQueryRepository;
 
     /**
      * V1    : 주문리스트를 조회하는 API
@@ -115,6 +118,31 @@ public class OrderApiController {
         return orders.stream()
                 .map(o -> new OrderDto(o))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * JPA에서 DTO 직접 조회
+     *
+     * 방식 : NTO1은 원 쿼리에 1TON는 분리하여 함수화하여 루프 쿼리를 돌린다.
+     *
+     * 문제 : n+1문제 발생
+     *
+     * */
+    @GetMapping("/api/v4/orders")
+    public List<OrderQueryDto> ordersV4() { //원래 엔티티의 레이아웃이 아니라 엔티티 값들을 입맛대로 DTO 형태로 만듦
+        return orderQueryRepository.findOrderQueryDtos();
+    }
+
+    /**
+     * JPA에서 DTO 직접 조회
+     *
+     * 개선 : ordersV4에서 발생한 N+1 문제 해결
+     *
+     *
+     * */
+    @GetMapping("/api/v5/orders")
+    public List<OrderQueryDto> ordersV5() { //원래 엔티티의 레이아웃이 아니라 엔티티 값들을 입맛대로 DTO 형태로 만듦
+        return orderQueryRepository.findAllByDto_optimization();
     }
 
     @Data

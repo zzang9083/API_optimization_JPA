@@ -113,7 +113,7 @@ public class MemberApiController {
         /**
          * 서비스에서 update 했을 때, 바뀐 값을 리턴해줄까?
          * -> NOPE. 명령(갱신)와 쿼리(조회)가 동시에 오면 동작이 애매하다. 명령이면 그냥 CALL하는걸로 끝내자.
-         *          걍 한번 더 호출해서 조회한 값을 리턴해주자
+         *          아니면 걍 한번 더 호출해서 업데이트한걸 조회한 값을 리턴해주자
          */
         memberService.update(id, request.getName());
         Member findMember = memberService.findOne(id); // 바뀐거 한번 더 조회해서 리턴
